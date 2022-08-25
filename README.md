@@ -32,7 +32,7 @@ For example:
 brew keg flog
 ```
 
-Which shows the keg contents for the [flog](https://github.com/marcransome/flog) formula:
+Which opens the keg contents for the [flog](https://github.com/marcransome/flog) formula:
 
 <img alt="finder" src="images/finder.png">
 
