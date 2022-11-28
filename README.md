@@ -46,4 +46,4 @@ Which opens the keg contents for the [flog](https://github.com/marcransome/flog)
 
 ## Contact
 
-Email me at [marc.ransome@fidgetbox.co.uk](mailto:marc.ransome@fidgetbox.co.uk) or tweet [@marcransome](http://www.twitter.com/marcransome).
+Email me at [marc.ransome@fidgetbox.co.uk](mailto:marc.ransome@fidgetbox.co.uk) or [create an issue](https://github.com/marcransome/homebrew-keg/issues).
