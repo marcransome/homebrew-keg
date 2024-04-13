@@ -33,17 +33,16 @@ module Homebrew
         Open the keg directory for <formula> in Finder.
       EOS
 
-      named_args [:formula]
+      switch "-p", "--path",
+             description: "Print the path only."
+
+      named_args [:formula], min: 1
     end
   end
 
   sig { void }
   def keg
     args = keg_args.parse
-
-    if args.no_named?
-      raise FormulaUnspecifiedError
-    end
 
     formulae = args.named.to_resolved_formulae
 
@@ -52,7 +51,11 @@ module Homebrew
         raise FormulaNotInstalledError, formula
       end
 
-      system("open", formula.opt_prefix.to_s)
+      if args.path?
+        puts File.realpath(formula.opt_prefix.to_s)
+      else
+        system("open", formula.opt_prefix.to_s)
+      end
     end
   end
 end
