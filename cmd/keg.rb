@@ -1,60 +1,36 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
-require "cli/parser"
-require "formula"
-
-class FormulaNotInstalledError < RuntimeError
-  extend T::Sig
-
-  attr_reader :name
-
-  def initialize(name)
-    super()
-
-    @name = name
-  end
-
-  sig { returns(String) }
-  def to_s
-    "The formula with name \"#{name}\" is not installed.".strip
-  end
-end
+require "abstract_command"
 
 module Homebrew
-  extend T::Sig
+  module Cmd
+    class Keg < AbstractCommand
+      cmd_args do
+        description <<~EOS
+          Open the keg directory for <formula> in Finder.
+        EOS
 
-  module_function
+        switch "-p", "--path",
+               description: "Print the path only."
 
-  sig { returns(CLI::Parser) }
-  def keg_args
-    Homebrew::CLI::Parser.new do
-      description <<~EOS
-        Open the keg directory for <formula> in Finder.
-      EOS
-
-      switch "-p", "--path",
-             description: "Print the path only."
-
-      named_args [:formula], min: 1
-    end
-  end
-
-  sig { void }
-  def keg
-    args = keg_args.parse
-
-    formulae = args.named.to_resolved_formulae
-
-    formulae.each do |formula|
-      if !formula.opt_prefix.exist?
-        raise FormulaNotInstalledError, formula
+        named_args [:formula], min: 1
       end
 
-      if args.path?
-        puts File.realpath(formula.opt_prefix.to_s)
-      else
-        system("open", formula.opt_prefix.to_s)
+      def run
+        formulae = args.named.to_resolved_formulae
+
+        formulae.each do |formula|
+          if !formula.opt_prefix.exist?
+            odie "Formula not installed: #{formula}"
+          end
+
+          if args.path?
+            puts File.realpath(formula.opt_prefix.to_s)
+          else
+            system("open", formula.opt_prefix.to_s)
+          end
+        end
       end
     end
   end
